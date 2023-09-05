@@ -24,6 +24,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,7 @@ public class HomeController extends BaseController {
 
     @Autowired
     private MetaService metaService;
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
 
     @GetMapping(value = "/")
@@ -258,7 +261,8 @@ public class HomeController extends BaseController {
             }
             // 设置对每个文章1分钟可以评论一次
             cache.hset(Types.COMMENTS_FREQUENCY.getType(),val,1,60);
-
+            // 记录成功日志
+            logger.info("Comment added successfully");
             return APIResponse.success();
 
         } catch (Exception e) {
